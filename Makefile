@@ -9,9 +9,9 @@ args:
 
 # Initializing
 # Use sleep to wait for gitlab initializing 
-initial_set: args
-	# docker-compose up -d && \
-	# sleep 120 && \ 
+up: args
+	docker-compose up -d && \
+	sleep 120 && \ 
 	docker exec -it \
 	$(GITLAB_CONTAINER) \
 	/bin/bash -c \
@@ -19,12 +19,12 @@ initial_set: args
 	 gitlab-ctl restart"
 
 # start gitlab
-start: args
-	docker-compose up -d
+start:
+	docker-compose start
 
 # stop gitlab
 stop:
-	dockr-compose stop
+	docker-compose stop
 
 # remove containers
 # After stop containers.
