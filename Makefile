@@ -8,28 +8,17 @@ args:
 	$(eval RUNNER_CONTAINER := $(shell docker ps | grep runner | awk -F " " '{print $$NF}'))
 
 # Initializing
-# Use sleep to wait for gitlab initializing 
-up: args
-	docker-compose up -d && \
-	sleep 120 && \ 
+# Use sleep to wait for gitlab initializing
+pre_up:
+	docker-compose up -d
+	sleep 120
+
+up: pre_up args
 	docker exec -it \
 	$(GITLAB_CONTAINER) \
 	/bin/bash -c \
 	"gitlab-rake db:migrate && \
 	 gitlab-ctl restart"
-
-# start gitlab
-start:
-	docker-compose start
-
-# stop gitlab
-stop:
-	docker-compose stop
-
-# remove containers
-# After stop containers.
-remove:
-	docker-compose rm
 
 # Regist runner
 runner_regist: args
