@@ -10,8 +10,8 @@
 /logs/
 /config/
 
-# gitlab_runner
-/gitlab_ci/
+# gitlab-runner
+/gitlab-runner/
 
 # redis
 /redis/

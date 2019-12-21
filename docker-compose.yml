@@ -37,7 +37,7 @@ services:
     depends_on:
       - gitlab
     volumes:
-      - ./gitlab_ci/runner:/etc/gitlab-runner
+      - ./gitlab-runner:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
 
   redis:
