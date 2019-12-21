@@ -8,9 +8,9 @@ services:
       - "30080:80"
       - "30443:443"
     volumes:
-      - ./data:/var/opt/gitlab
-      - ./logs:/var/log/gitlab
-      - ./config:/etc/gitlab
+      - ./data:/var/opt/gitlab:Z
+      - ./logs:/var/log/gitlab:Z
+      - ./config:/etc/gitlab:Z
     depends_on:
       - redis
       - postgresql
@@ -37,7 +37,7 @@ services:
     depends_on:
       - gitlab
     volumes:
-      - ./gitlab-runner:/etc/gitlab-runner
+      - ./gitlab-runner:/etc/gitlab-runner:Z
       - /var/run/docker.sock:/var/run/docker.sock
 
   redis:
@@ -46,7 +46,7 @@ services:
     command:
       - --loglevel warning
     volumes:
-      - ./redis:/var/lib/redis
+      - ./redis:/var/lib/redis:Z
 
   postgresql:
     restart: always
@@ -56,4 +56,4 @@ services:
       - POSTGRES_PASSWORD=gitlab
       - POSTGRES_DB=gitlabhq_production
     volumes:
-      - ./postgresql:/var/lib/postgresql
+      - ./postgresql:/var/lib/postgresql:Z
