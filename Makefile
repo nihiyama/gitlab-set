@@ -10,8 +10,8 @@ args:
 # Initializing
 # Use sleep to wait for gitlab initializing 
 up: args
-	docker-compose up -d && \
-	sleep 120 && \ 
+	docker-compose up -d
+	sleep 120
 	docker exec -it \
 	$(GITLAB_CONTAINER) \
 	/bin/bash -c \
