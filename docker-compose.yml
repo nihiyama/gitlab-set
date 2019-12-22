@@ -43,10 +43,10 @@ services:
   redis:
     restart: always
     image: redis:5.0.7-alpine
-    command:
-      - --loglevel warning
+    command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - ./redis/data:/data:Z
+      - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
 
   postgresql:
     restart: always
