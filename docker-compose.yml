@@ -46,7 +46,7 @@ services:
     command:
       - --loglevel warning
     volumes:
-      - ./redis:/var/lib/redis:Z
+      - ./redis/data:/data:Z
 
   postgresql:
     restart: always
