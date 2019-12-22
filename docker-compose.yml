@@ -50,10 +50,10 @@ services:
 
   postgresql:
     restart: always
-    image: postgres:12.1-alpine
+    image: postgres:9.6-alpine
     environment:
       - POSTGRES_USER=gitlab
       - POSTGRES_PASSWORD=gitlab
       - POSTGRES_DB=gitlabhq_production
     volumes:
-      - ./postgresql:/var/lib/postgresql:Z
+      - ./postgresql/data:/var/lib/postgresql/data:Z
