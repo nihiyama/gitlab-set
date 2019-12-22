@@ -18,7 +18,7 @@ up: pre_up args
 	$(GITLAB_CONTAINER) \
 	/bin/bash -c \
 	"gitlab-rake db:migrate && \
-	 gitlab-ctl restart"
+	 gitlab-ctl reconfigure"
 
 # Regist runner
 runner_regist: args
