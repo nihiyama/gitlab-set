@@ -13,7 +13,7 @@
       - `./redis` -> `PATH_TO/redis`
   - `postgresql`
     - `volumes`
-      - `./volumes` -> `PATH_TO/var/lib/postgresql`
+      - `./postgresql/data` -> `PATH_TO/postgresql/data`
 
 ## Operate GitLab
 
