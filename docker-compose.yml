@@ -42,7 +42,7 @@ services:
 
   redis:
     restart: always
-    image: redis:3.0.7-alpine
+    image: redis:5.0.7-alpine
     command:
       - --loglevel warning
     volumes:
