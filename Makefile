@@ -10,15 +10,19 @@ args:
 # Initializing
 # Use sleep to wait for gitlab initializing
 pre_up:
-	docker-compose up -d
+	docker-compose up -d gitlab gitlab-runner
 	sleep 120
 
 up: pre_up args
 	docker exec -it \
 	$(GITLAB_CONTAINER) \
 	/bin/bash -c \
-	"gitlab-rake db:migrate && \
+	"useradd nginx && \
+	 usermod -aG git nginx && \
+	 chmod g+rx /var/opt/gitlab/gitlab-rails/sockets/ && \
+	 gitlab-rake db:migrate && \
 	 gitlab-ctl reconfigure"
+	docker-compose up -d nginx
 
 # Regist runner
 runner_regist: args
