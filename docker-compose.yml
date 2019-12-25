@@ -27,7 +27,7 @@ services:
         gitlab_rails['redis_port'] = '6379'
         gitlab_rails['time_zone'] = 'Asia/Tokyo'
         gitlab_rails['gitlab_shell_ssh_port'] = 30022
-        external_url 'http://localhost/'
+        external_url 'http://gitlab/'
         nginx['enabel'] = false
         web_server['external_users'] = ['nginx']
         web_server['username'] = 'nginx'

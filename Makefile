@@ -6,6 +6,8 @@
 args:
 	$(eval GITLAB_CONTAINER := $(shell docker ps | grep gitlab-ce | awk -F " " '{print $$NF}'))
 	$(eval RUNNER_CONTAINER := $(shell docker ps | grep runner | awk -F " " '{print $$NF}'))
+	$(eval GITLAB_IP := $(shell docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(GITLAB_CONTAINER)))
+	$(eval NETWORK := $(shell docker network ls | grep gitlab | awk -F " " '{print $$2}'))
 
 # Initializing
 # Use sleep to wait for gitlab initializing
@@ -31,8 +33,10 @@ runner_regist: args
 	/bin/bash -c \
 	"gitlab-runner register --non-interactive \
 	 --url http://$(GITLAB_CONTAINER)/ \
+	 --clone-url http://$(GITLAB_CONTAINER)/ \
 	 --registration-token ${TOKEN} \
 	 --executor 'docker' \
 	 --docker-image 'ubuntu' \
+	 --docker-network-mode '$(NETWORK)' \
 	 --docker-privileged"
 
