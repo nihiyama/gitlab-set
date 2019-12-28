@@ -26,7 +26,7 @@ services:
       - ../config:/etc/gitlab:Z
     environment:
       GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
-    command: /bin/bash -c "sleep 10 && /assets/wrapper"
+    command: /bin/bash -c "sleep 20 && /assets/wrapper"
     configs:
       - source: gitlab
         target: /omnibus_config.rb
@@ -47,7 +47,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    command: /bin/bash -c "sleep 300 && nginx -g 'deamon off'"
+    command: /bin/bash -c "sleep 300 && nginx -g 'daemon off;'"
     volumes:
       - ../conf/nginx/:/etc/nginx/
 
