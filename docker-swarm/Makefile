@@ -12,7 +12,11 @@ args:
 # Initializing
 # Use sleep to wait for gitlab initializing
 pre_up:
-	docker-compose up -d gitlab gitlab-runner
+	$(eval SWARM_IS_INACTIVE := $(shell docker info | grep Swarm | awk -F " " '{print $$NF}'))
+	if [ "$(SWARM_IS_INACTIVE)" = "inactive" ]; then \
+		docker swarm init --advertise-addr 127.0.0.1 --listen-addr 127.0.0.1:2377; \
+	fi
+	docker stack deploy --compose-file docker-compose.yml gitlab
 	sleep 120
 
 up: pre_up args
@@ -24,7 +28,6 @@ up: pre_up args
 	 chmod g+rx /var/opt/gitlab/gitlab-rails/sockets/ && \
 	 gitlab-rake db:migrate && \
 	 gitlab-ctl reconfigure"
-	docker-compose up -d nginx
 
 # Regist runner
 runner_regist: args
