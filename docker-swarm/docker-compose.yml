@@ -1,4 +1,4 @@
-version: "3.6"
+version: "3.7"
 services:
   redis:
     image: redis:5.0.7-alpine
@@ -6,6 +6,13 @@ services:
     volumes:
       - ../redis/data:/data:Z
       - ../conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - private
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 1s
+        order: start-first
 
   postgresql:
     image: postgres:9.6-alpine
@@ -15,27 +22,43 @@ services:
       - POSTGRES_DB=gitlabhq_production
     volumes:
       - ../postgresql/data:/var/lib/postgresql/data:Z
+    networks:
+      - private
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 1s
+        order: start-first
 
   gitlab:
     image: gitlab/gitlab-ce:latest
     ports:
       - "30022:22"
+    command: /bin/bash -c "sleep 20 && /assets/wrapper"
     volumes:
       - ../data:/var/opt/gitlab:Z
       - ../logs:/var/log/gitlab:Z
       - ../config:/etc/gitlab:Z
     environment:
       GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
-    command: /bin/bash -c "sleep 20 && /assets/wrapper"
     configs:
       - source: gitlab
         target: /omnibus_config.rb
+    networks:
+      - private
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 30s
+        order: start-first
 
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
     volumes:
       - ../gitlab-runner:/etc/gitlab-runner:Z
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - private
     deploy:
       mode: replicated
       replicas: 2
@@ -50,7 +73,22 @@ services:
     command: /bin/bash -c "sleep 300 && nginx -g 'daemon off;'"
     volumes:
       - ../conf/nginx/:/etc/nginx/
+    networks:
+      - private
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 1s
+        order: start-first
 
 configs:
   gitlab:
     file: ./gitlab.rb
+
+networks:
+  private:
+    driver: overlay
+    internal: true
+    attachable: true
+  public:
+    driver: overlay

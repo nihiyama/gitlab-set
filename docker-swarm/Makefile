@@ -30,9 +30,10 @@ up: pre_up args
 	 gitlab-ctl reconfigure"
 
 # Regist runner
-runner_regist: args
+regist: args
+	for runner in $(RUNNER_CONTAINER); do \
 	docker exec -it \
-	$(RUNNER_CONTAINER) \
+	$$runner \
 	/bin/bash -c \
 	"gitlab-runner register --non-interactive \
 	 --url http://$(GITLAB_CONTAINER)/ \
@@ -41,5 +42,6 @@ runner_regist: args
 	 --executor 'docker' \
 	 --docker-image 'ubuntu' \
 	 --docker-network-mode '$(NETWORK)' \
-	 --docker-privileged"
+	 --docker-privileged"; \
+	 done
 
