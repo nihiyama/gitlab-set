@@ -1,0 +1,69 @@
+version: "3.6"
+services:
+  gitlab:
+    restart: always
+    image: gitlab/gitlab-ce:latest
+    ports:
+      - "30022:22"
+    volumes:
+      - ../data:/var/opt/gitlab:Z
+      - ../logs:/var/log/gitlab:Z
+      - ../config:/etc/gitlab:Z
+    depends_on:
+      - redis
+      - postgresql
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        postgresql['enable'] = false
+        gitlab_rails['db_username'] = "gitlab"
+        gitlab_rails['db_password'] = "gitlab"
+        gitlab_rails['db_host'] = "postgresql"
+        gitlab_rails['db_port'] = "5432"
+        gitlab_rails['db_database'] = "gitlabhq_production"
+        gitlab_rails['db_adapter'] = 'postgresql'
+        gitlab_rails['db_encoding'] = 'utf8'
+        redis['enable'] = false
+        gitlab_rails['redis_host'] = 'redis'
+        gitlab_rails['redis_port'] = '6379'
+        gitlab_rails['time_zone'] = 'Asia/Tokyo'
+        gitlab_rails['gitlab_shell_ssh_port'] = 30022
+        external_url 'http://gitlab/'
+        nginx['enabel'] = false
+        web_server['external_users'] = ['nginx']
+        web_server['username'] = 'nginx'
+
+  gitlab-runner:
+    restart: always
+    image: gitlab/gitlab-runner:alpine
+    depends_on:
+      - gitlab
+    volumes:
+      - ../gitlab-runner:/etc/gitlab-runner:Z
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  redis:
+    restart: always
+    image: redis:5.0.7-alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ../redis/data:/data:Z
+      - ../conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+
+  postgresql:
+    restart: always
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_USER=gitlab
+      - POSTGRES_PASSWORD=gitlab
+      - POSTGRES_DB=gitlabhq_production
+    volumes:
+      - ../postgresql/data:/var/lib/postgresql/data:Z
+
+  nginx:
+    restart: always
+    image: nginx:1.13
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../conf/nginx/:/etc/nginx/
