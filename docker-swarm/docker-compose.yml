@@ -47,7 +47,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    command: /bin/bash -c "sleep 300 && nginx -g deamon off"
+    command: /bin/bash -c "sleep 300 && nginx -g 'deamon off'"
     volumes:
       - ../conf/nginx/:/etc/nginx/
 
