@@ -9,6 +9,6 @@ data "template_file" "gitlab_backup_s3" {
   template = file("${var.aws_iam_policy_json}")
 
   vars = {
-    bucket_name = "nihiyama_gitlab_backup_bucket"
+    bucket_name = var.aws_s3_bucket_name
   }
 }

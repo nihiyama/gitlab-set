@@ -16,3 +16,7 @@ variable "aws_iam_policy_json" {
   description = "iam policy json filename"
   default     = "iam_policy.json"
 }
+
+variable "aws_s3_bucket_name" {
+  description = "S3 bucket name"
+}
