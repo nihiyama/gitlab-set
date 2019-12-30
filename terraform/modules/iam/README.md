@@ -20,7 +20,7 @@ You shoud prepare gpg-key by base64
 3. Encode to base64
     - `cat <user-name>.public.gpg | base64 | tr -d '\n' > <user-name>.public.gpg.base64`
     - confirm `cat <user-name>.public.gpg.base64`
-    - "*****" is replaced the key in environments/*/main.tf
+    - `"********"` is replaced the key in `environments/*/main.tf`
 
 4. Terraform is executed
 
