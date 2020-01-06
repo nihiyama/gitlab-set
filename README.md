@@ -1,35 +1,20 @@
 # gitlab-set
 
-## Edit doker-compose.yml
+You can build gitlab-environment.
 
-- `services`
-  - `gitlab`
-    - `volumes`
-      - `./data` -> `PATH_TO/data`
-      - `./logs` -> `PATH_TO/logs`
-      - `./config` -> `PATH_TO/config`
-  - `redis`
-    - `volumes`
-      - `./redis` -> `PATH_TO/redis`
-  - `postgresql`
-    - `volumes`
-      - `./postgresql/data` -> `PATH_TO/postgresql/data`
+## Building gitlab
 
-## Operate GitLab
+You choose docker-compose or swarm mode.
 
-### Initialize GitLab
+- [docker-compose](./docker-compose/README.md)
+- [docker swarm](./docker-swarm/README.md)
 
-1. `make initial_set`
+## Setting buckup by terraform
 
-### Start GitLab
+You can make AWS S3 bucket for buckup by terraform.
 
-1. `make start`
+See [here](./terraform/README.md).
 
-### Stop GitLab
+## Demonstration
 
-1. `make stops`
-
-### Regist gitlab-runner
-
-1. Take token `XXXXXXXXXX` from your repository
-2. `make TOKEN=XXXXXXXXXX runner_regist`
+comming soon.
