@@ -34,7 +34,7 @@ services:
     image: gitlab/gitlab-ce:latest
     ports:
       - "30022:22"
-    command: /bin/bash -c "sleep 20 && /assets/wrapper"
+    command: /bin/bash -c "sleep 15 && /assets/wrapper"
     volumes:
       - ../data:/var/opt/gitlab:Z
       - ../logs:/var/log/gitlab:Z
@@ -70,7 +70,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    command: /bin/bash -c "sleep 300 && nginx -g 'daemon off;'"
+    command: /bin/bash -c "sleep 240 && nginx -g 'daemon off;'"
     volumes:
       - ../conf/nginx/:/etc/nginx/
     networks:

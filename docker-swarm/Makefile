@@ -17,7 +17,7 @@ pre_up:
 		docker swarm init --advertise-addr 127.0.0.1 --listen-addr 127.0.0.1:2377; \
 	fi
 	docker stack deploy --compose-file docker-compose.yml gitlab
-	sleep 120
+	sleep 80
 
 up: pre_up args
 	docker exec -it \
