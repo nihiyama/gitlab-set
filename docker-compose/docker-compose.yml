@@ -47,7 +47,7 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - ../redis/data:/data:Z
-      - ../conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
 
   postgresql:
     restart: always
@@ -66,4 +66,4 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ../conf/nginx/:/etc/nginx/
+      - ./conf/nginx/:/etc/nginx/

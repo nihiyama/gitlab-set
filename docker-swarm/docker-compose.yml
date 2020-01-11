@@ -5,7 +5,7 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - ../redis/data:/data:Z
-      - ../conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
     networks:
       - private
     deploy:
@@ -72,7 +72,7 @@ services:
       - "443:443"
     command: /bin/bash -c "sleep 240 && nginx -g 'daemon off;'"
     volumes:
-      - ../conf/nginx/:/etc/nginx/
+      - ./conf/nginx/:/etc/nginx/
     networks:
       - private
     deploy:
