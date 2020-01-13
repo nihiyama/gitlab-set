@@ -3,7 +3,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags {
+  tags = {
     Name = var.aws_vpc_name
   }
 }
@@ -11,11 +11,11 @@ resource "aws_vpc" "vpc" {
 resource "aws_subnet" "sn" {
   count                   = var.aws_subnets_nums
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.aws_vpc_cider_block, 4, count.index)
+  cidr_block              = cidrsubnet(var.aws_vpc_cider_block, 8, count.index)
   availability_zone       = element(data.aws_availability_zones.available.names, count.index % var.aws_subnets_nums)
   map_public_ip_on_launch = var.aws_map_public_ip_is
 
-  tags {
+  tags = {
     Name = var.aws_subnet_name
   }
 }
@@ -23,7 +23,7 @@ resource "aws_subnet" "sn" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
-  tags {
+  tags = {
     Name = var.aws_internet_gateway_name
   }
 }
@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_route_table" "rtb" {
   vpc_id = aws_vpc.vpc.id
 
-  tags {
+  tags = {
     Name = var.aws_route_table_name
   }
 }
@@ -44,14 +44,14 @@ resource "aws_route" "rt" {
 
 resource "aws_route_table_association" "rta" {
   route_table_id = aws_route_table.rtb.id
-  subnet_id      = aws_subnet.sn.id
+  subnet_id      = element(aws_subnet.sn.*.id, var.aws_subnets_nums)
 }
 
 resource "aws_security_group" "sg" {
   name   = var.aws_security_group_name
   vpc_id = aws_vpc.vpc.id
 
-  tags {
+  tags = {
     Name = var.aws_security_group_name
   }
 }

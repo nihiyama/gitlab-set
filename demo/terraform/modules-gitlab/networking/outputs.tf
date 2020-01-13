@@ -3,7 +3,11 @@ output "vpc_id" {
 }
 
 output "subnet_id" {
-  value = aws_subnet.sn.id
+  value = element(aws_subnet.sn.*.id, var.aws_subnets_nums)
+}
+
+output "availability_zone" {
+  value = element(aws_subnet.sn.*.availability_zone, var.aws_subnets_nums)
 }
 
 output "security_group_id" {

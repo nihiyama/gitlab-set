@@ -15,9 +15,9 @@ variable "aws_subnet_name" {
   description = "subnet_names_header"
 }
 
-variable "aws_availability_zone" {
-  description = "aws enable availability zone"
-}
+# variable "aws_availability_zone" {
+#   description = "aws enable availability zone"
+# }
 
 variable "aws_map_public_ip_is" {
   description = "aws map public ip"
@@ -41,6 +41,6 @@ variable "aws_security_group_name" {
   description = "aws security group name"
 }
 
-variable "aws_security_group_port" {
-  description = "aws security group port"
-}
+# variable "aws_security_group_port" {
+#   description = "aws security group port"
+# }
