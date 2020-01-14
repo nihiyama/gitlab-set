@@ -12,8 +12,12 @@ args:
 # Initializing
 # Use sleep to wait for gitlab initializing
 pre_up:
-	docker-compose up -d gitlab gitlab-runner
-	sleep 120
+	$(eval SWARM_IS_INACTIVE := $(shell docker info | grep Swarm | awk -F " " '{print $$NF}'))
+	if [ "$(SWARM_IS_INACTIVE)" = "inactive" ]; then \
+		docker swarm init --advertise-addr 127.0.0.1 --listen-addr 127.0.0.1:2377; \
+	fi
+	docker stack deploy --compose-file docker-compose.yml gitlab
+	sleep 80
 
 up: pre_up args
 	docker exec -it \
@@ -24,12 +28,12 @@ up: pre_up args
 	 chmod g+rx /var/opt/gitlab/gitlab-rails/sockets/ && \
 	 gitlab-rake db:migrate && \
 	 gitlab-ctl reconfigure"
-	docker-compose up -d nginx
 
 # Regist runner
 regist: args
+	for runner in $(RUNNER_CONTAINER); do \
 	docker exec -it \
-	$(RUNNER_CONTAINER) \
+	$$runner \
 	/bin/bash -c \
 	"gitlab-runner register --non-interactive \
 	 --url http://$(GITLAB_CONTAINER)/ \
@@ -38,13 +42,6 @@ regist: args
 	 --executor 'docker' \
 	 --docker-image 'ubuntu' \
 	 --docker-network-mode '$(NETWORK)' \
-	 --docker-privileged"
-
-backup: args
-	docker exec -it \
-	$(GITLAB_CONTAINER) gitlab-backup create
-
-restore: args
-	docker exec -it \
-	$(GITLAB_CONTAINER) gitlab-backup restore
+	 --docker-privileged"; \
+	 done
 

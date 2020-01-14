@@ -15,10 +15,3 @@ external_url 'http://gitlab/'
 nginx['enabel'] = false
 web_server['external_users'] = ['nginx']
 web_server['username'] = 'nginx'
-gitlab_rails['backup_upload_connection'] = {
-    'provider' => 'AWS',
-    'region' => 'ap-northeast-1',
-    'aws_access_key_id' => 'AKIxxxxxxxxxx',
-    'aws_secret_access_key' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-}
-gitlab_rails['backup_upload_remote_directory'] = 'nihiyama-gitlab-buckup-bucket'

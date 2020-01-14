@@ -15,6 +15,22 @@ module "networking" {
   aws_security_group_name        = "gitlab_sg"
 }
 
+module "s3_gitlab_backup_bucket" {
+  source             = "../../modules-gitlab/s3/"
+  aws_s3_bucket_name = "nihiyama-gitlab-buckup-bucket"
+}
+
+module "iam_gitlab_backup_s3" {
+  source                     = "../../modules-gitlab/iam/"
+  aws_iam_policy_name        = "gitlab_backup_s3_policy"
+  aws_iam_policy_path        = "/policy/"
+  aws_iam_policy_description = "gitlab backup s3 policy"
+  aws_iam_policy_json        = "./policy/gitlab_backup_s3_policy.json.tpl"
+  aws_iam_username           = "gitlab_backup_s3_user"
+  aws_iam_pgpkey             = "./credentials/gitlab.public.gpg.base64"
+  aws_s3_bucket_name         = module.s3_gitlab_backup_bucket.name
+}
+
 module "key-pair" {
   source            = "../../modules-gitlab/key-pair/"
   aws_key_name      = "gitlab_key_pair"
