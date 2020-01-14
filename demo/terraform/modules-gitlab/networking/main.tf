@@ -92,6 +92,42 @@ resource "aws_security_group_rule" "gitlab_ssh" {
   security_group_id = aws_security_group.sg.id
 }
 
+resource "aws_security_group_rule" "cluster_connect" {
+  type              = "ingress"
+  from_port         = 2377
+  to_port           = 2377
+  protocol          = "tcp"
+  cidr_blocks       = var.aws_security_group_cidr_blocks
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "node_connect_tcp" {
+  type              = "ingress"
+  from_port         = 7946
+  to_port           = 7946
+  protocol          = "tcp"
+  cidr_blocks       = var.aws_security_group_cidr_blocks
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "node_connect_udp" {
+  type              = "ingress"
+  from_port         = 7946
+  to_port           = 7946
+  protocol          = "udp"
+  cidr_blocks       = var.aws_security_group_cidr_blocks
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "orverlay" {
+  type              = "ingress"
+  from_port         = 4789
+  to_port           = 4789
+  protocol          = "udp"
+  cidr_blocks       = var.aws_security_group_cidr_blocks
+  security_group_id = aws_security_group.sg.id
+}
+
 resource "aws_security_group_rule" "egress" {
   type              = "egress"
   from_port         = 0

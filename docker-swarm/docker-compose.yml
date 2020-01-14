@@ -13,6 +13,8 @@ services:
         parallelism: 1
         delay: 1s
         order: start-first
+      placement:
+        - node.role == manager
 
   postgresql:
     image: postgres:9.6-alpine
@@ -29,6 +31,8 @@ services:
         parallelism: 1
         delay: 1s
         order: start-first
+      placement:
+        - node.role == manager
 
   gitlab:
     image: gitlab/gitlab-ce:latest
@@ -51,6 +55,8 @@ services:
         parallelism: 1
         delay: 30s
         order: start-first
+      placement:
+        - node.role == manager
 
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
@@ -62,6 +68,8 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+    placement:
+      - node.role == worker
 
   nginx:
     image: nginx:1.13
@@ -80,6 +88,8 @@ services:
         parallelism: 1
         delay: 1s
         order: start-first
+      placement:
+        - node.role == manager
 
 configs:
   gitlab:

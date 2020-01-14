@@ -1,18 +1,36 @@
 resource "aws_instance" "gitlab" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.aws_instance_type
-  vpc_security_group_ids = var.aws_security_group_ids
+  vpc_security_group_ids = var.aws_security_group_ids_gitlab
   key_name               = var.aws_key_name
   subnet_id              = var.aws_subnet_id
   user_data              = data.template_file.user_data.rendered
 
   root_block_device {
     volume_type = "gp2"
-    volume_size = var.aws_volume_size
+    volume_size = var.aws_volume_size_gitlab
   }
 
   tags = {
-    Name = var.aws_instance_name
+    Name = var.aws_instance_name_gitlab
+  }
+}
+
+resource "aws_instance" "runner" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = var.aws_instance_type
+  vpc_security_group_ids = var.aws_security_group_ids_runner
+  key_name               = var.aws_key_name
+  subnet_id              = var.aws_subnet_id
+  user_data              = data.template_file.user_data.rendered
+
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = var.aws_volume_size_runner
+  }
+
+  tags = {
+    Name = var.aws_instance_name_runner
   }
 }
 

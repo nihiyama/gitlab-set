@@ -11,7 +11,7 @@ module "networking" {
   aws_map_public_ip_is           = true
   aws_internet_gateway_name      = "gitlab_igw"
   aws_route_table_name           = "gitlab_rtb"
-  aws_security_group_cidr_blocks = ["122.209.48.81/32"]
+  aws_security_group_cidr_blocks = ["*********"]
   aws_security_group_name        = "gitlab_sg"
 }
 

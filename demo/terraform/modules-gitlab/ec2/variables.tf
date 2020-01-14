@@ -7,21 +7,34 @@ variable "aws_instance_type" {
   default     = "t3.medium"
 }
 
-variable "aws_security_group_ids" {
-  description = "security group ids"
-  type        = list(string)
-}
-
 # variable "aws_availability_zone" {
 #   description = "availability zone"
 # }
 
-variable "aws_volume_size" {
-  description = "ec2 volume size"
+variable "aws_volume_size_gitlab" {
+  description = "ec2 volume size for gitlab"
 }
 
-variable "aws_instance_name" {
-  description = "instance name"
+variable "aws_volume_size_runner" {
+  description = "ec2 volume size for runner"
+}
+
+variable "aws_instance_name_gitlab" {
+  description = "instance name for gitlab"
+}
+
+variable "aws_instance_name_runner" {
+  description = "instance name for runner"
+}
+
+variable "aws_security_group_ids_gitlab" {
+  description = "security group ids for gitlab"
+  type        = list(string)
+}
+
+variable "aws_security_group_ids_runner" {
+  description = "security group ids for runner"
+  type        = list(string)
 }
 
 variable "aws_subnet_id" {
@@ -29,7 +42,7 @@ variable "aws_subnet_id" {
 }
 
 variable "aws_user_data_template" {
-  description = "init shell script"
+  description = "init user data"
 }
 
 variable "aws_key_name" {
