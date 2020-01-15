@@ -20,11 +20,25 @@ resource "aws_iam_policy_attachment" "gitlab_backup_s3" {
   policy_arn = aws_iam_policy.gitlab_backup_s3_policy.arn
 }
 
+resource "aws_s3_bucket_policy" "only_vpce" {
+  bucket = var.aws_s3_bucket_id
+  policy = data.template_file.bucket_vpce_policy.rendered
+}
+
 data "template_file" "gitlab_backup_s3" {
   template = file("${var.aws_iam_policy_json}")
 
   vars = {
     bucket_name = var.aws_s3_bucket_name
+  }
+}
+
+data "template_file" "bucket_vpce_policy" {
+  template = file("${var.aws_bucket_policy_json}")
+
+  vars = {
+    bucket_name = var.aws_s3_bucket_name
+    vpce        = var.aws_vpc_endpoint
   }
 }
 

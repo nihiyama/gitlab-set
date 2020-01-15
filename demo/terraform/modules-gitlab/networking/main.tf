@@ -47,12 +47,21 @@ resource "aws_route_table_association" "rta" {
   subnet_id      = element(aws_subnet.sn.*.id, var.aws_subnets_nums)
 }
 
-resource "aws_security_group" "sg" {
-  name   = var.aws_security_group_name
+resource "aws_security_group" "gitlab-sg" {
+  name   = var.aws_security_group_name_gitlab
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = var.aws_security_group_name
+    Name = var.aws_security_group_name_gitlab
+  }
+}
+
+resource "aws_security_group" "swarm-sg" {
+  name   = var.aws_security_group_name_swarm
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = var.aws_security_group_name_swarm
   }
 }
 
@@ -62,7 +71,7 @@ resource "aws_security_group_rule" "ingress_http" {
   to_port           = 80
   protocol          = "tcp"
   cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+  security_group_id = aws_security_group.gitlab-sg.id
 }
 
 resource "aws_security_group_rule" "ingress_https" {
@@ -71,7 +80,7 @@ resource "aws_security_group_rule" "ingress_https" {
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+  security_group_id = aws_security_group.gitlab-sg.id
 }
 
 resource "aws_security_group_rule" "default_ssh" {
@@ -80,7 +89,7 @@ resource "aws_security_group_rule" "default_ssh" {
   to_port           = 22
   protocol          = "tcp"
   cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+  security_group_id = aws_security_group.gitlab-sg.id
 }
 
 resource "aws_security_group_rule" "gitlab_ssh" {
@@ -89,43 +98,34 @@ resource "aws_security_group_rule" "gitlab_ssh" {
   to_port           = 30022
   protocol          = "tcp"
   cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+  security_group_id = aws_security_group.gitlab-sg.id
 }
 
 resource "aws_security_group_rule" "cluster_connect" {
-  type              = "ingress"
-  from_port         = 2377
-  to_port           = 2377
-  protocol          = "tcp"
-  cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+  type                     = "ingress"
+  from_port                = 2377
+  to_port                  = 2377
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.swarm-sg.id
+  security_group_id        = aws_security_group.swarm-sg.id
 }
 
-resource "aws_security_group_rule" "node_connect_tcp" {
-  type              = "ingress"
-  from_port         = 7946
-  to_port           = 7946
-  protocol          = "tcp"
-  cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+resource "aws_security_group_rule" "node_connect_tcp_gitlab" {
+  type                     = "ingress"
+  from_port                = 7946
+  to_port                  = 7946
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.swarm-sg.id
+  security_group_id        = aws_security_group.swarm-sg.id
 }
 
-resource "aws_security_group_rule" "node_connect_udp" {
-  type              = "ingress"
-  from_port         = 7946
-  to_port           = 7946
-  protocol          = "udp"
-  cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
-}
-
-resource "aws_security_group_rule" "orverlay" {
-  type              = "ingress"
-  from_port         = 4789
-  to_port           = 4789
-  protocol          = "udp"
-  cidr_blocks       = var.aws_security_group_cidr_blocks
-  security_group_id = aws_security_group.sg.id
+resource "aws_security_group_rule" "orverlay_gitlab" {
+  type                     = "ingress"
+  from_port                = 4789
+  to_port                  = 4789
+  protocol                 = "udp"
+  source_security_group_id = aws_security_group.swarm-sg.id
+  security_group_id        = aws_security_group.gitlab-sg.id
 }
 
 resource "aws_security_group_rule" "egress" {
@@ -134,7 +134,18 @@ resource "aws_security_group_rule" "egress" {
   to_port           = 0
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.sg.id
+  security_group_id = aws_security_group.swarm-sg.id
+}
+
+resource "aws_vpc_endpoint" "s3_vpce" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.ap-northeast-1.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = [aws_route_table.rtb.id]
+
+  tags = {
+    Name = var.aws_s3_vpc_endpoint_name
+  }
 }
 
 data "aws_availability_zones" "available" {

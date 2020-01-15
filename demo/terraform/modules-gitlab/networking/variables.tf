@@ -37,8 +37,16 @@ variable "aws_security_group_cidr_blocks" {
   type        = list(string)
 }
 
-variable "aws_security_group_name" {
-  description = "aws security group name"
+variable "aws_security_group_name_gitlab" {
+  description = "aws security group name for gitlab"
+}
+
+variable "aws_security_group_name_swarm" {
+  description = "aws security group name for swarm"
+}
+
+variable "aws_s3_vpc_endpoint_name" {
+  description = "aws vpc endpoint name"
 }
 
 # variable "aws_security_group_port" {

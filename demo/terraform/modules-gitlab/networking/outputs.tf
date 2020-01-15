@@ -10,6 +10,14 @@ output "availability_zone" {
   value = element(aws_subnet.sn.*.availability_zone, var.aws_subnets_nums)
 }
 
-output "security_group_id" {
-  value = aws_security_group.sg.id
+output "gitlab-security_group_id" {
+  value = aws_security_group.gitlab-sg.id
+}
+
+output "swarm-security_group_id" {
+  value = aws_security_group.swarm-sg.id
+}
+
+output "s3_vpce_id" {
+  value = aws_vpc_endpoint.s3_vpce.id
 }
