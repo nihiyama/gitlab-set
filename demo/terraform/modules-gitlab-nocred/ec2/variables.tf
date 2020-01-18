@@ -27,6 +27,10 @@ variable "aws_instance_name_runner" {
   description = "instance name for runner"
 }
 
+variable "aws_iam_instance_profile" {
+  description = "instance profile name"
+}
+
 variable "aws_security_group_ids_gitlab" {
   description = "security group ids for gitlab"
   type        = list(string)

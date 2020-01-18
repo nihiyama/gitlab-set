@@ -4,6 +4,7 @@ resource "aws_instance" "gitlab" {
   vpc_security_group_ids = var.aws_security_group_ids_gitlab
   key_name               = var.aws_key_name
   subnet_id              = var.aws_subnet_id
+  iam_instance_profile   = var.aws_iam_instance_profile
   user_data              = data.template_file.user_data.rendered
 
   root_block_device {
@@ -22,6 +23,7 @@ resource "aws_instance" "runner" {
   vpc_security_group_ids = var.aws_security_group_ids_runner
   key_name               = var.aws_key_name
   subnet_id              = var.aws_subnet_id
+  iam_instance_profile   = var.aws_iam_instance_profile
   user_data              = data.template_file.user_data.rendered
 
   root_block_device {

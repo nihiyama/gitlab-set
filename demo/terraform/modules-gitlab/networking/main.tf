@@ -110,11 +110,20 @@ resource "aws_security_group_rule" "cluster_connect" {
   security_group_id        = aws_security_group.swarm-sg.id
 }
 
-resource "aws_security_group_rule" "node_connect_gitlab" {
+resource "aws_security_group_rule" "node_connect_tcp_gitlab" {
   type                     = "ingress"
   from_port                = 7946
   to_port                  = 7946
-  protocol                 = "-1"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.swarm-sg.id
+  security_group_id        = aws_security_group.swarm-sg.id
+}
+
+resource "aws_security_group_rule" "node_connect_udp_gitlab" {
+  type                     = "ingress"
+  from_port                = 7946
+  to_port                  = 7946
+  protocol                 = "udp"
   source_security_group_id = aws_security_group.swarm-sg.id
   security_group_id        = aws_security_group.swarm-sg.id
 }

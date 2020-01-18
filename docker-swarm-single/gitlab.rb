@@ -15,4 +15,9 @@ external_url 'http://gitlab/'
 nginx['enabel'] = false
 web_server['external_users'] = ['nginx']
 web_server['username'] = 'nginx'
+gitlab_rails['backup_upload_connection'] = {
+    'provider' => 'AWS',
+    'region' => 'ap-northeast-1',
+}
+gitlab_rails['backup_upload_remote_directory'] = 'nihiyama-gitlab-backup-bucket'
 gitlab_rails['backup_keep_time'] = 604800
