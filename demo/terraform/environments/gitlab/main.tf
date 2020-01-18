@@ -11,15 +11,15 @@ module "networking" {
   aws_map_public_ip_is           = true
   aws_internet_gateway_name      = "gitlab_igw"
   aws_route_table_name           = "gitlab_rtb"
-  aws_security_group_cidr_blocks = ["******"]
+  aws_security_group_cidr_blocks = ["*******"]
   aws_security_group_name_gitlab = "gitlab_sg"
   aws_security_group_name_swarm  = "swarm_sg"
-  aws_s3_vpc_endpoint_name       = "gitlab_buckup_s3_vpce"
+  aws_s3_vpc_endpoint_name       = "gitlab_backup_s3_vpce"
 }
 
 module "s3_gitlab_backup_bucket" {
   source             = "../../modules-gitlab/s3/"
-  aws_s3_bucket_name = "nihiyama-gitlab-buckup-bucket"
+  aws_s3_bucket_name = "nihiyama-gitlab-backup-bucket"
 }
 
 module "iam_gitlab_backup_s3" {

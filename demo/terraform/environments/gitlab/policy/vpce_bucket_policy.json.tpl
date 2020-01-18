@@ -5,7 +5,16 @@
      {
        "Sid": "Access-to-specific-VPCE-only",
        "Principal": "*",
-       "Action": "s3:*",
+       "Action": [
+                "s3:AbortMultipartUpload",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:GetObjectAcl",
+                "s3:ListBucketMultipartUploads",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
        "Effect": "Deny",
        "Resource": ["arn:aws:s3:::${bucket_name}",
                     "arn:aws:s3:::${bucket_name}/*"],

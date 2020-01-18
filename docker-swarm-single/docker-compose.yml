@@ -4,7 +4,7 @@ services:
     image: redis:5.0.7-alpine
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
-      - ../redis/data:/data:Z
+      - redis_data:/data:Z
       - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
     networks:
       - private
@@ -21,7 +21,7 @@ services:
       - POSTGRES_PASSWORD=gitlab
       - POSTGRES_DB=gitlabhq_production
     volumes:
-      - ../postgresql/data:/var/lib/postgresql/data:Z
+      - pg_data:/var/lib/postgresql/data:Z
     networks:
       - private
     deploy:
@@ -36,9 +36,9 @@ services:
       - "30022:22"
     command: /bin/bash -c "sleep 15 && /assets/wrapper"
     volumes:
-      - ../data:/var/opt/gitlab:Z
-      - ../logs:/var/log/gitlab:Z
-      - ../config:/etc/gitlab:Z
+      - gitlab-data:/var/opt/gitlab:Z
+      - gitlab-logs:/var/log/gitlab:Z
+      - gitlab-config:/etc/gitlab:Z
     environment:
       GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
     configs:
@@ -55,7 +55,7 @@ services:
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
     volumes:
-      - ../gitlab-runner:/etc/gitlab-runner:Z
+      - runner-config:/etc/gitlab-runner:Z
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - private
@@ -84,6 +84,14 @@ services:
 configs:
   gitlab:
     file: ./gitlab.rb
+
+volumes:
+  redis_data:
+  pg_data:
+  gitlab-data:
+  gitlab-config:
+  gitlab-logs:
+  runner-config:
 
 networks:
   private:
