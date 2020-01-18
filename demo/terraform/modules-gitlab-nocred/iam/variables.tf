@@ -10,6 +10,10 @@ variable "aws_ec2_iam_role_name" {
   description = "ec2 iam role name"
 }
 
+variable "aws_iam_instance_profile" {
+  description = "instance profile name"
+}
+
 variable "aws_s3_access_iam_policy_json" {
   description = "s3 access policy"
 }

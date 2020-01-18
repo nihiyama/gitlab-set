@@ -1,3 +1,3 @@
-output "ec2_access_to_s3_role_name" {
-  value = aws_iam_role.ec2_access_to_s3_role.name
+output "s3_access_profile_name" {
+  value = aws_iam_instance_profile.s3_access_profile.name
 }

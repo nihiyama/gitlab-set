@@ -1,15 +1,20 @@
 resource "aws_iam_policy" "s3_access" {
-  name = var.aws_s3_access_iam_policy_name
+  name   = var.aws_s3_access_iam_policy_name
   policy = data.template_file.s3_access_policy.rendered
 }
 
 resource "aws_iam_role" "ec2_access_to_s3_role" {
-  name = var.aws_ec2_iam_role_name
+  name               = var.aws_ec2_iam_role_name
   assume_role_policy = data.template_file.ec2_assume_role.rendered
 }
 
-resource "aws_iam_role_policy_attachment" "ec2_access_to_s3_att" {
+resource "aws_iam_instance_profile" "s3_access_profile" {
+  name = var.aws_iam_instance_profile
   role = aws_iam_role.ec2_access_to_s3_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_access_to_s3_att" {
+  role       = aws_iam_role.ec2_access_to_s3_role.name
   policy_arn = aws_iam_policy.s3_access.arn
 }
 
@@ -19,7 +24,7 @@ resource "aws_s3_bucket_policy" "only_vpce" {
 }
 
 data "template_file" "s3_access_policy" {
-  template = file("${var.aws_bucket_policy_json}")
+  template = file("${var.aws_s3_access_iam_policy_json}")
 
   vars = {
     bucket_name = var.aws_s3_bucket_name
