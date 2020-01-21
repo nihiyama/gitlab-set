@@ -8,14 +8,13 @@ packages:
 timezone: "Asia/Tokyo"
 
 write_files:
-- path: /etc/systemd/system/docker.service.d/override.apiVersion: v1
-  permissions: 0755
-  content: |
-    [Service]
-    Environment="DOCKER_NETWORK_OPTIONS=--dns 8.8.8.8"
-    ExecStart=
-    ExecStart=/usr/bin/dockerd -H fd:// $DOCKER_NETWORK_OPTIONS -H tcp://127.0.0.1:2375
-  
+  - path: /etc/systemd/system/docker.service.d/override.conf
+    permissions: 0755
+    content: |
+      [Service]
+      Environment="DOCKER_NETWORK_OPTIONS=--dns 8.8.8.8"
+      ExecStart=
+      ExecStart=/usr/bin/dockerd -H fd:// $DOCKER_NETWORK_OPTIONS -H tcp://127.0.0.1:2375
 
 runcmd:
   - systemctl enable docker
@@ -35,4 +34,5 @@ runcmd:
     /var/run/gitlab/postgresql/data \
     /var/run/gitlab/redis/data \
     /var/run/gitlab/gitlab-runner
-  -
+  - systemctl daemon-reload
+  - systemctl restart docker

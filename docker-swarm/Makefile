@@ -33,19 +33,19 @@ up: pre_up args
 
 # Regist runner
 regist: args
-    for runner in $(RUNNER_CONTAINER); do \
+	for runner in $(RUNNER_CONTAINER); do \
 	docker exec -it \
-    $$runner \
-    /bin/bash -c \
-    "gitlab-runner register --non-interactive \
-     --url http://gitlab/ \
-     --clone-url http://gitlab/ \
-     --registration-token ${TOKEN} \
-     --executor 'docker' \
-     --docker-dns '8.8.8.8' \
-     --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
-     --docker-image 'docker:stable' \
-     --docker-network-mode '$(NETWORK)' \
-     --docker-privileged"; \
-    done
+	$$runner \
+	/bin/bash -c \
+	"gitlab-runner register --non-interactive \
+	 --url http://gitlab/ \
+	 --clone-url http://gitlab/ \
+	 --registration-token ${TOKEN} \
+	 --executor 'docker' \
+	 --docker-dns '8.8.8.8' \
+	 --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
+	 --docker-image 'docker:stable' \
+	 --docker-network-mode '$(NETWORK)' \
+	 --docker-privileged"; \
+	done
 

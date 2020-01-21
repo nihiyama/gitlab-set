@@ -7,8 +7,6 @@
        "Principal": "*",
        "Action": [
                 "s3:AbortMultipartUpload",
-                "s3:GetBucketAcl",
-                "s3:GetBucketLocation",
                 "s3:GetObject",
                 "s3:GetObjectAcl",
                 "s3:ListBucketMultipartUploads",
