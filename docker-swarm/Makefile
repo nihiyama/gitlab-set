@@ -12,7 +12,7 @@ args:
 
 # swarm on
 swarm: args
-	docker swarm init --advertise-addr MGR_IP --listen-addr MGR_IP:2377; \
+	docker swarm init --advertise-addr $(MGR_IP) --listen-addr $(MGR_IP):2377; \
 
 
 # Initializing

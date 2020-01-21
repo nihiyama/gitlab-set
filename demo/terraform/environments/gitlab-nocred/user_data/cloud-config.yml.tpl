@@ -28,11 +28,11 @@ runcmd:
   - docker pull postgres:9.6-alpine
   - docker pull gitlab/gitlab-ce:latest
   - docker pull gitlab/gitlab-runner:alpine
-  - mkdir -p /var/run/gitlab/gitlab/data \
-    /var/run/gitlab/gitlab/logs \
-    /var/run/gitlab/gitlab/config \
-    /var/run/gitlab/postgresql/data \
-    /var/run/gitlab/redis/data \
-    /var/run/gitlab/gitlab-runner
+  - mkdir -p /var/run/gitlab/gitlab/data
+  - mkdir -p /var/run/gitlab/gitlab/logs
+  - mkdir -p /var/run/gitlab/gitlab/config
+  - mkdir -p /var/run/gitlab/postgresql/data
+  - mkdir -p /var/run/gitlab/redis/data
+  - mkdir -p /var/run/gitlab/gitlab-runner
   - systemctl daemon-reload
   - systemctl restart docker

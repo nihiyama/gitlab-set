@@ -4,10 +4,10 @@ services:
     image: redis:5.0.7-alpine
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
-      - ../redis/data:/data:Z
+      - /var/run/gitlab/redis/data:/data:Z
       - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
     networks:
-      - private
+      - public
     deploy:
       update_config:
         parallelism: 1
@@ -24,9 +24,9 @@ services:
       - POSTGRES_PASSWORD=gitlab
       - POSTGRES_DB=gitlabhq_production
     volumes:
-      - ../postgresql/data:/var/lib/postgresql/data:Z
+      - /var/run/gitlab/postgresql/data:/var/lib/postgresql/data:Z
     networks:
-      - private
+      - public
     deploy:
       update_config:
         parallelism: 1
@@ -42,16 +42,16 @@ services:
       - "30022:22"
     command: /bin/bash -c "sleep 15 && /assets/wrapper"
     volumes:
-      - ../data:/var/opt/gitlab:Z
-      - ../logs:/var/log/gitlab:Z
-      - ../config:/etc/gitlab:Z
+      - /var/run/gitlab/gitlab/data:/var/opt/gitlab:Z
+      - /var/run/gitlab/gitlab/logs:/var/log/gitlab:Z
+      - /var/run/gitlab/gitlab/config:/etc/gitlab:Z
     environment:
       GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
     configs:
       - source: gitlab
         target: /omnibus_config.rb
     networks:
-      - private
+      - public
     deploy:
       update_config:
         parallelism: 1
@@ -64,10 +64,10 @@ services:
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
     volumes:
-      - ../gitlab-runner:/etc/gitlab-runner:Z
+      - /var/run/gitlab/gitlab-runner:/etc/gitlab-runner:Z
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - private
+      - public
     deploy:
       mode: replicated
       replicas: 3
@@ -86,7 +86,7 @@ services:
     volumes:
       - ./conf/nginx/:/etc/nginx/
     networks:
-      - private
+      - public
     deploy:
       update_config:
         parallelism: 1
