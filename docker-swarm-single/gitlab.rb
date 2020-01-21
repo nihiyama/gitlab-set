@@ -18,6 +18,7 @@ web_server['username'] = 'nginx'
 gitlab_rails['backup_upload_connection'] = {
     'provider' => 'AWS',
     'region' => 'ap-northeast-1',
+    'use_iam_profile' => true
 }
 gitlab_rails['backup_upload_remote_directory'] = 'nihiyama-gitlab-backup-bucket'
 gitlab_rails['backup_keep_time'] = 604800

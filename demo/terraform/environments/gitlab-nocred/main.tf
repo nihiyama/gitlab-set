@@ -47,7 +47,7 @@ module "ec2" {
   aws_instance_name_runner      = "runner"
   aws_instance_type             = "t2.medium"
   aws_security_group_ids_gitlab = [module.networking.gitlab-security_group_id, module.networking.swarm-security_group_id]
-  aws_security_group_ids_runner = [module.networking.swarm-security_group_id]
+  aws_security_group_ids_runner = [module.networking.gitlab-security_group_id, module.networking.swarm-security_group_id]
   aws_subnet_id                 = module.networking.subnet_id
   aws_iam_instance_profile      = module.iam_gitlab_backup_s3.s3_access_profile_name
   aws_volume_size_gitlab        = 30

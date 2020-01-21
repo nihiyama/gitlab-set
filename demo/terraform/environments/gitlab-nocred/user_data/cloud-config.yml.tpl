@@ -7,6 +7,16 @@ packages:
 
 timezone: "Asia/Tokyo"
 
+write_files:
+- path: /etc/systemd/system/docker.service.d/override.apiVersion: v1
+  permissions: 0755
+  content: |
+    [Service]
+    Environment="DOCKER_NETWORK_OPTIONS=--dns 8.8.8.8"
+    ExecStart=
+    ExecStart=/usr/bin/dockerd -H fd:// $DOCKER_NETWORK_OPTIONS -H tcp://127.0.0.1:2375
+  
+
 runcmd:
   - systemctl enable docker
   - systemctl start docker
@@ -19,9 +29,10 @@ runcmd:
   - docker pull postgres:9.6-alpine
   - docker pull gitlab/gitlab-ce:latest
   - docker pull gitlab/gitlab-runner:alpine
-  - mkdir -p /var/run/gitlab/gitlab/data
-  - mkdir -p /var/run/gitlab/gitlab/logs
-  - mkdir -p /var/run/gitlab/gitlab/config
-  - mkdir -p /var/run/gitlab/postgresql/data
-  - mkdir -p /var/run/gitlab/redis/data
-  - mkdir -p /var/run/gitlab/gitlab-runner
+  - mkdir -p /var/run/gitlab/gitlab/data \
+    /var/run/gitlab/gitlab/logs \
+    /var/run/gitlab/gitlab/config \
+    /var/run/gitlab/postgresql/data \
+    /var/run/gitlab/redis/data \
+    /var/run/gitlab/gitlab-runner
+  -

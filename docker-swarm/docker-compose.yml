@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.7"
 services:
   redis:
     image: redis:5.0.7-alpine
@@ -14,7 +14,8 @@ services:
         delay: 1s
         order: start-first
       placement:
-        - node.role == manager
+        constraints:
+          - node.role == manager
 
   postgresql:
     image: postgres:9.6-alpine
@@ -32,7 +33,8 @@ services:
         delay: 1s
         order: start-first
       placement:
-        - node.role == manager
+        constraints:
+          - node.role == manager
 
   gitlab:
     image: gitlab/gitlab-ce:latest
@@ -56,7 +58,8 @@ services:
         delay: 30s
         order: start-first
       placement:
-        - node.role == manager
+        constraints:
+          - node.role == manager
 
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
@@ -67,9 +70,10 @@ services:
       - private
     deploy:
       mode: replicated
-      replicas: 2
-    placement:
-      - node.role == worker
+      replicas: 3
+      placement:
+        constraints:
+          - node.role == worker
 
   nginx:
     image: nginx:1.13
@@ -89,7 +93,8 @@ services:
         delay: 1s
         order: start-first
       placement:
-        - node.role == manager
+        constraints:
+          - node.role == manager
 
 configs:
   gitlab:
@@ -102,3 +107,4 @@ networks:
     attachable: true
   public:
     driver: overlay
+    attachable: true
