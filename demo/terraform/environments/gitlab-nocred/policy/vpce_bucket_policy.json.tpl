@@ -18,6 +18,9 @@
                     "arn:aws:s3:::${bucket_name}/*"],
        "Condition": {
          "StringNotEquals": {
+           "aws:username": "${terraform_user}"
+         },
+         "StringNotEqualsIgnoreCase": {
            "aws:sourceVpce": "${vpce}"
          }
        }

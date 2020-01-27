@@ -22,6 +22,18 @@ variable "aws_s3_access_iam_policy_name" {
   description = "s3 access policy name"
 }
 
+variable "aws_terraform_user" {
+  description = "terraform user name"
+}
+
+variable "aws_ecr_access_policy_json" {
+  description = "ecr access policy"
+}
+
+variable "aws_ecr_access_iam_policy_name" {
+  description = "ecr access policy name"
+}
+
 variable "aws_vpc_endpoint" {
   description = "S3 endpoint"
 }

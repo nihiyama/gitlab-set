@@ -22,16 +22,19 @@ module "s3_gitlab_backup_bucket" {
   aws_s3_bucket_name = "nihiyama-gitlab-backup-bucket"
 }
 
-module "iam_gitlab_backup_s3" {
+module "iam_gitlab" {
   source                          = "../../modules-gitlab-nocred/iam/"
   aws_s3_bucket_name              = module.s3_gitlab_backup_bucket.name
   aws_ec2_assume_role_policy_json = "./policy/ec2_assume_role_policy.json.tpl"
   aws_ec2_iam_role_name           = "ec2_access_to_s3_role"
   aws_s3_access_iam_policy_json   = "./policy/gitlab_backup_s3_policy.json.tpl"
   aws_s3_access_iam_policy_name   = "s3_access_policy"
-  aws_iam_instance_profile        = "s3_access_profile"
+  aws_iam_instance_profile        = "gitlab_profile"
   aws_bucket_policy_json          = "./policy/vpce_bucket_policy.json.tpl"
   aws_vpc_endpoint                = module.networking.s3_vpce_id
+  aws_terraform_user              = "nihiyama"
+  aws_ecr_access_policy_json      = "./policy/ec2_ecr_access_policy.json.tpl"
+  aws_ecr_access_iam_policy_name  = "ecr_access_policy"
   aws_s3_bucket_id                = module.s3_gitlab_backup_bucket.id
 }
 
@@ -49,7 +52,7 @@ module "ec2" {
   aws_security_group_ids_gitlab = [module.networking.gitlab-security_group_id, module.networking.swarm-security_group_id]
   aws_security_group_ids_runner = [module.networking.gitlab-security_group_id, module.networking.swarm-security_group_id]
   aws_subnet_id                 = module.networking.subnet_id
-  aws_iam_instance_profile      = module.iam_gitlab_backup_s3.s3_access_profile_name
+  aws_iam_instance_profile      = module.iam_gitlab.s3_access_profile_name
   aws_volume_size_gitlab        = 30
   aws_volume_size_runner        = 8
   # aws_availability_zone  = module.networking.availability_zone
